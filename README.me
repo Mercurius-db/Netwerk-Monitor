@@ -1,0 +1,389 @@
+# Network Monitor 3.0
+
+Een eenvoudige Python-tool om apparaten en basisinformatie van een lokaal netwerk te bekijken.
+
+## Nieuw in 3.0
+
+De scanner werkt nu meer als een compacte, lokale Fing-inventaris:
+
+* parallelle ICMP-discovery vult de ARP-cache snel aan
+* reverse-DNS en Windows-naamdetectie proberen een echte apparaatnaam te vinden
+* apparaatregels tonen ook MAC-privacy, rol, vermoede categorie en het tijdstip waarop ze gezien zijn
+* extra lokale services: SMB, NetBIOS en RTSP naast de oorspronkelijke poorten
+* HTTP/HTTPS-apparaten tonen indien mogelijk hun webinterface/serverinformatie
+* mDNS en SSDP/UPnP ontdekken lokaal bekende smart-home-, media- en printerapparaten
+* NetBIOS en veilige HTTP-paginatitels leveren extra namen voor pc's, NAS-systemen, printers en routers
+* de DHCP-server die je pc gebruikt wordt in het adapteroverzicht getoond
+* `device_history.json` bewaart first seen, last seen en het aantal observaties per apparaat
+* een voorzichtige risico-indicatie (`LOW`, `NOTICE`, `REVIEW`) legt open oude/beheerdiensten uit zonder een apparaat onterecht als gehackt te bestempelen
+* elke scan schrijft een leesbare `scan_history.json`-snapshot weg
+* `python main.py --json` (of je eigen Python-pad) geeft dezelfde gegevens machineleesbaar terug
+
+Het programma blijft read-only: het wijzigt geen router- of apparaatinstellingen.
+
+## Uitleg van alle gegevens
+
+| Gegeven | Betekenis |
+| --- | --- |
+| **Naam** | Hostnaam die het apparaat zelf op het netwerk doorgeeft. Bij `Unknown` gaf het geen bruikbare naam door. |
+| **IP-adres** | Het tijdelijke lokale adres waarmee het apparaat op jouw wifi/ethernet-netwerk communiceert. Het kan veranderen. |
+| **Ping** | Reactietijd in milliseconden. Geen antwoord is niet hetzelfde als offline: sommige apparaten blokkeren ping. |
+| **MAC-adres** | Adres van de netwerkinterface. `Randomized/private` betekent dat het apparaat dit bewust afschermt voor privacy. |
+| **Fabrikant** | Fabrikant afgeleid uit het MAC-prefix, uitsluitend via de ingebouwde offline database. |
+| **Type / rol** | Beste lokale inschatting, bijvoorbeeld router, NAS, telefoon of media-apparaat. Het blijft een indicatie. |
+| **Diensten** | Bereikbare veelgebruikte netwerkdiensten zoals HTTP, SMB of SSH. Dit is geen volledige security-audit. |
+| **Webinterface** | Lokale webservernaam of paginatitel, bijvoorbeeld van een router, printer of camera. |
+| **Lokale detectie** | Naam- en service-aanwijzingen die alleen op jouw netwerk komen via mDNS en SSDP/UPnP. |
+| **Risicogrond** | Waarom een apparaat `LAAG`, `LET OP` of `CONTROLEREN` krijgt. Dit is geen bewijs van malware of een hack. |
+| **Eerst / laatst gezien** | Eerste en laatste moment waarop deze monitor het apparaat zelf zag. Dit is geen officiële router/DHCP-verbindingstijd. |
+| **Aantal waarnemingen** | In hoeveel scans het apparaat is teruggevonden. `NIEUW` verschijnt bij de eerste observatie. |
+| **Gateway** | Meestal je router: het apparaat dat verkeer naar internet of andere netwerken doorstuurt. |
+| **DHCP-server** | Het apparaat dat automatisch IP-adressen uitdeelt, vaak dezelfde router als de gateway. |
+
+## Apparaten als bekend markeren
+
+Na een normale scan verschijnt een lokale lijst met onbekende apparaten als
+`[ ]`. Voer één of meer nummers in (bijvoorbeeld `1,3`) om ze als bekend te
+markeren. Je kunt daarna alleen een eigen naam invullen; het ingeschatte type
+blijft behouden. De app bewaart dit
+uitsluitend in `Known_devices.json` op je eigen computer. Bij een
+`Randomized/private` MAC-adres kan een telefoon of tablet in een volgende scan
+als nieuw verschijnen, omdat dat apparaat zijn MAC-adres bewust verandert.
+
+## Begrippenlijst
+
+| Term | Betekenis |
+| --- | --- |
+| **MAC address** | Het netwerkadres van een interface. `Randomized/private` betekent dat het apparaat bewust geen vast fabrikantadres laat zien. |
+| **Local discovery** | Lokale naam- of serviceaanwijzingen via mDNS en SSDP/UPnP. Deze blijven op je eigen netwerk. |
+| **Services** | Bereikbare veelgebruikte TCP-diensten, geen volledige security-audit. |
+| **Last seen** | Laatste moment waarop deze monitor het apparaat zag; dit is geen officiële DHCP/router-lease. |
+| **Risk** | Voorzichtige exposure-indicatie. `REVIEW` betekent: controleer dit apparaat of deze dienst, niet dat het gehackt is. |
+
+## Wat doet Network Monitor?
+
+Network Monitor verzamelt informatie over het netwerk waarop je computer verbonden is.
+
+De tool kan onder andere:
+
+* Je eigen IP-adres tonen
+* Het subnet bepalen
+* De default gateway vinden
+* De Wi-Fi-naam tonen
+* Controleren of er internetverbinding is
+* Apparaten op het lokale netwerk detecteren
+* IP-adressen van apparaten tonen
+* MAC-adressen tonen
+* Fabrikanten proberen te herkennen
+* Apparaten proberen te identificeren
+* Ping meten
+* Veelgebruikte netwerkpoorten controleren
+* Bekende apparaten herkennen
+* Onbekende apparaten markeren
+* Een overzicht geven van mogelijke security warnings
+* De totale scantijd tonen
+
+---
+
+## INFORMATION
+
+Dit gedeelte toont informatie over **jouw eigen computer en verbinding**.
+---
+
+### Computer
+
+De naam van je computer.
+
+Voorbeeld:
+
+`Computer: Name`
+
+### IP-adres
+
+Het lokale IP-adres van je computer.
+
+Voorbeeld:
+
+`IP-adres: 000.000.0.000`
+
+Dit is het adres waarmee je computer binnen het lokale netwerk bereikbaar is.
+
+### Subnet
+
+Het lokale netwerk waarin je computer zit.
+
+Voorbeeld:
+
+`Subnet: 000.000.0.0/00`
+
+### Default gateway
+
+Meestal het IP-adres van je router.
+
+Voorbeeld:
+
+`Default gateway: 000.000.0.0`
+
+Je computer gebruikt de gateway om verkeer naar andere netwerken en het internet te sturen.
+
+### Wi-Fi
+
+De naam van het draadloze netwerk waarmee je verbonden bent.
+
+Voorbeeld:
+
+`Wi-Fi: MijnWiFi`
+
+### Internet
+
+Geeft aan of je computer momenteel verbinding met het internet kan maken.
+
+`Online` = internet bereikbaar.
+
+`Offline` = internet niet bereikbaar.
+
+---
+
+# Network Scan
+
+Tijdens de scan probeert Network Monitor apparaten in het lokale netwerk te vinden.
+
+Voorbeeld:
+
+`Devices found: 8`
+
+Dit betekent dat de scanner 8 apparaten heeft gevonden.
+
+## DEVICE
+
+Iedere gevonden netwerkapparaat krijgt zijn eigen blok.
+
+### IP
+
+Het lokale IP-adres van het apparaat.
+
+Voorbeeld:
+
+`IP: 000.000.0.000`
+
+### Name
+
+De hostnaam van het apparaat, als deze beschikbaar is.
+
+Voorbeeld:
+
+`Name: Xbox`
+
+Sommige apparaten geven geen naam door. Dan verschijnt:
+
+`Name: Unknown`
+
+### MAC
+
+Het fysieke netwerkadres van de netwerkinterface.
+
+Voorbeeld:
+
+`MAC: A0-A0-A0-A0-00-A0`
+
+Een MAC-adres is normaal uniek voor een netwerkinterface.
+
+### Vendor
+
+De vermoedelijke fabrikant van de netwerkinterface.
+
+Voorbeeld:
+
+`Vendor: Apple`
+
+De fabrikant wordt bepaald aan de hand van het MAC-adres.
+
+Bij moderne smartphones kan dit soms niet betrouwbaar werken omdat apparaten **private/randomized MAC addresses** gebruiken.
+
+### Status
+
+Geeft aan of het apparaat in je `known_devices.json` staat.
+
+`Known` = apparaat dat jij eerder als bekend hebt opgeslagen.
+
+`Unknown` = apparaat dat nog niet als bekend is opgeslagen.
+
+### Ping
+
+De tijd die een netwerkpakket nodig heeft om heen en terug te gaan.
+
+Voorbeeld:
+
+`Ping: 14 ms`
+
+Lager betekent meestal een snellere reactie.
+
+Als een apparaat niet reageert:
+
+`Ping: Timeout`
+
+Een timeout betekent niet automatisch dat het apparaat offline is. Sommige apparaten blokkeren ping-verzoeken.
+
+### Role
+
+De functie die Network Monitor aan het apparaat probeert toe te kennen.
+
+Bijvoorbeeld:
+
+`Role: Default Gateway`
+
+of:
+
+`Role: Network Device`
+
+---
+
+# Open Ports
+
+Network Monitor controleert een aantal veelgebruikte TCP-poorten.
+
+Voorbeeld:
+
+`80 - HTTP`
+
+Een open poort betekent dat er op dat apparaat een netwerkservice bereikbaar lijkt te zijn op die poort.
+
+## Veelgebruikte poorten
+
+| Poort | Service        | Betekenis                 |
+| ----: | -------------- | ------------------------- |
+|    21 | FTP            | Bestanden via FTP         |
+|    22 | SSH            | Secure Shell              |
+|    23 | Telnet         | Oud remote-accessprotocol |
+|    53 | DNS !          | Domain Name System        |
+|    80 | HTTP           | Webserver                 |
+|   443 | HTTPS          | Beveiligde webserver      |
+|  3389 | Remote Desktop | Windows Remote Desktop    |
+
+## Security status
+
+De scanner geeft een eenvoudige indicatie:
+
+`OK`
+
+Geen bijzondere waarschuwing volgens de huidige configuratie.
+
+`INFO`
+
+Informatie die interessant kan zijn.
+
+`WARNING`
+
+Een poort die extra aandacht kan verdienen.
+
+Een `WARNING` betekent **niet automatisch dat het apparaat gehackt of onveilig is**.
+
+---
+
+# Network Report
+
+Hier staat een samenvatting van de scan.
+
+### Devices found
+
+Aantal gevonden apparaten.
+
+### Open ports
+
+Totaal aantal gevonden open poorten bij alle apparaten.
+
+### Security warnings
+
+Aantal gevonden poorten die momenteel als `WARNING` zijn ingesteld.
+
+### Scan time
+
+Hoe lang de volledige scan duurde.
+
+Voorbeeld:
+
+`Scan time: 21.473 seconds`
+
+---
+
+# Known Devices
+
+Network Monitor gebruikt:
+
+`known_devices.json`
+
+Hierin kun je apparaten opslaan die je kent.
+
+Bijvoorbeeld:
+
+* Je Xbox
+* Je smartphone
+* Je laptop
+* Je printer
+* Je eigen Raspberry Pi
+
+Daardoor kan de scanner onderscheid maken tussen:
+
+`Known`
+
+en:
+
+`Unknown`
+
+Dit is vooral handig wanneer je de scanner op meerdere netwerken gebruikt.
+
+---
+
+# Wat kan ik ermee doen?
+
+Je kunt Network Monitor gebruiken om snel te zien:
+
+* Welke apparaten momenteel zichtbaar zijn
+* Welke IP-adressen ze gebruiken
+* Welke MAC-adressen ze hebben
+* Welke fabrikanten waarschijnlijk gebruikt worden
+* Welke apparaten bekend of onbekend zijn
+* Hoe snel apparaten reageren
+* Welke veelgebruikte netwerkpoorten bereikbaar zijn
+* Of je eigen internetverbinding werkt
+* Welke router/gateway je gebruikt
+
+Het is vooral bedoeld als **leerproject voor networking en cybersecurity**.
+
+---
+
+# Belangrijk
+
+Network Monitor is een **lokale netwerkmonitor** en is bedoeld voor netwerken waarvoor je toestemming hebt om ze te controleren.
+
+De scanner verandert niets aan andere apparaten en probeert apparaten niet te verwijderen, blokkeren of aanvallen.
+
+---
+
+# Project
+
+Dit project is gemaakt met Python en gebruikt onder andere:
+
+* `socket`
+* `subprocess`
+* `threading`
+* `json`
+* `os`
+
+De belangrijkste bestanden zijn:
+
+`main.py`
+
+De gebruikersinterface en het hoofdprogramma.
+
+`netwerk_info.py`
+
+De functies voor netwerkdetectie, apparaten, MAC-adressen, ping en poorten.
+
+`systeem_info.py`
+
+Informatie over het besturingssysteem.
+
+`known_devices.json`
+
+Opslag van apparaten die je als bekend hebt ingesteld.
