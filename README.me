@@ -2,7 +2,7 @@
 
 Een eenvoudige Python-tool om apparaten en basisinformatie van een lokaal netwerk te bekijken.
 
-## Nieuw in 3.0
+# Nieuw in 3.0
 
 De scanner werkt nu meer als een compacte, lokale Fing-inventaris:
 
@@ -21,7 +21,7 @@ De scanner werkt nu meer als een compacte, lokale Fing-inventaris:
 
 Het programma blijft read-only: het wijzigt geen router- of apparaatinstellingen.
 
-## Uitleg van alle gegevens
+# Uitleg van alle gegevens
 
 | Gegeven | Betekenis |
 | --- | --- |
@@ -50,7 +50,7 @@ uitsluitend in `Known_devices.json` op je eigen computer. Bij een
 `Randomized/private` MAC-adres kan een telefoon of tablet in een volgende scan
 als nieuw verschijnen, omdat dat apparaat zijn MAC-adres bewust verandert.
 
-## Begrippenlijst
+# Begrippenlijst
 
 | Term | Betekenis |
 | --- | --- |
@@ -60,7 +60,7 @@ als nieuw verschijnen, omdat dat apparaat zijn MAC-adres bewust verandert.
 | **Last seen** | Laatste moment waarop deze monitor het apparaat zag; dit is geen officiële DHCP/router-lease. |
 | **Risk** | Voorzichtige exposure-indicatie. `REVIEW` betekent: controleer dit apparaat of deze dienst, niet dat het gehackt is. |
 
-## Wat doet Network Monitor?
+# Wat doet Network Monitor?
 
 Network Monitor verzamelt informatie over het netwerk waarop je computer verbonden is.
 
@@ -85,12 +85,12 @@ De tool kan onder andere:
 
 ---
 
-## INFORMATION
+# INFORMATION
 
 Dit gedeelte toont informatie over **jouw eigen computer en verbinding**.
 ---
 
-### Computer
+# Computer
 
 De naam van je computer.
 
@@ -98,7 +98,7 @@ Voorbeeld:
 
 `Computer: Name`
 
-### IP-adres
+# IP-adres
 
 Het lokale IP-adres van je computer.
 
@@ -108,7 +108,7 @@ Voorbeeld:
 
 Dit is het adres waarmee je computer binnen het lokale netwerk bereikbaar is.
 
-### Subnet
+# Subnet
 
 Het lokale netwerk waarin je computer zit.
 
@@ -116,7 +116,7 @@ Voorbeeld:
 
 `Subnet: 000.000.0.0/00`
 
-### Default gateway
+# Default gateway
 
 Meestal het IP-adres van je router.
 
@@ -126,7 +126,7 @@ Voorbeeld:
 
 Je computer gebruikt de gateway om verkeer naar andere netwerken en het internet te sturen.
 
-### Wi-Fi
+# Wi-Fi
 
 De naam van het draadloze netwerk waarmee je verbonden bent.
 
@@ -134,7 +134,7 @@ Voorbeeld:
 
 `Wi-Fi: MijnWiFi`
 
-### Internet
+# Internet
 
 Geeft aan of je computer momenteel verbinding met het internet kan maken.
 
@@ -188,7 +188,7 @@ Voorbeeld:
 
 Een MAC-adres is normaal uniek voor een netwerkinterface.
 
-### Vendor
+# Vendor
 
 De vermoedelijke fabrikant van de netwerkinterface.
 
@@ -200,7 +200,7 @@ De fabrikant wordt bepaald aan de hand van het MAC-adres.
 
 Bij moderne smartphones kan dit soms niet betrouwbaar werken omdat apparaten **private/randomized MAC addresses** gebruiken.
 
-### Status
+# Status
 
 Geeft aan of het apparaat in je `known_devices.json` staat.
 
@@ -208,7 +208,7 @@ Geeft aan of het apparaat in je `known_devices.json` staat.
 
 `Unknown` = apparaat dat nog niet als bekend is opgeslagen.
 
-### Ping
+# Ping
 
 De tijd die een netwerkpakket nodig heeft om heen en terug te gaan.
 
@@ -224,7 +224,7 @@ Als een apparaat niet reageert:
 
 Een timeout betekent niet automatisch dat het apparaat offline is. Sommige apparaten blokkeren ping-verzoeken.
 
-### Role
+# Role
 
 De functie die Network Monitor aan het apparaat probeert toe te kennen.
 
@@ -260,7 +260,7 @@ Een open poort betekent dat er op dat apparaat een netwerkservice bereikbaar lij
 |   443 | HTTPS          | Beveiligde webserver      |
 |  3389 | Remote Desktop | Windows Remote Desktop    |
 
-## Security status
+# Security status
 
 De scanner geeft een eenvoudige indicatie:
 
@@ -284,11 +284,11 @@ Een `WARNING` betekent **niet automatisch dat het apparaat gehackt of onveilig i
 
 Hier staat een samenvatting van de scan.
 
-### Devices found
+# Devices found
 
 Aantal gevonden apparaten.
 
-### Open ports
+# Open ports
 
 Totaal aantal gevonden open poorten bij alle apparaten.
 
@@ -296,7 +296,7 @@ Totaal aantal gevonden open poorten bij alle apparaten.
 
 Aantal gevonden poorten die momenteel als `WARNING` zijn ingesteld.
 
-### Scan time
+# Scan time
 
 Hoe lang de volledige scan duurde.
 
@@ -334,7 +334,7 @@ Dit is vooral handig wanneer je de scanner op meerdere netwerken gebruikt.
 
 ---
 
-# Wat kan ik ermee doen?
+#Wat kan ik ermee doen?
 
 Je kunt Network Monitor gebruiken om snel te zien:
 
@@ -352,7 +352,7 @@ Het is vooral bedoeld als **leerproject voor networking en cybersecurity**.
 
 ---
 
-# Belangrijk
+#Belangrijk
 
 Network Monitor is een **lokale netwerkmonitor** en is bedoeld voor netwerken waarvoor je toestemming hebt om ze te controleren.
 
@@ -360,7 +360,7 @@ De scanner verandert niets aan andere apparaten en probeert apparaten niet te ve
 
 ---
 
-# Project
+#project
 
 Dit project is gemaakt met Python en gebruikt onder andere:
 
@@ -392,5 +392,5 @@ Om optimaal te laten werken
 Opslag van apparaten die je als bekend hebt ingesteld.
 
 -----------------------------
-DIT IS DEELS MET AI GEMAAKT!
-DIT IS EEN BETA VERSIE!
+#DIT IS DEELS MET AI GEMAAKT!
+#DIT IS EEN BETA VERSIE!
